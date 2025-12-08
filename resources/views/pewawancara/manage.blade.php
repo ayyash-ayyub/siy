@@ -68,6 +68,16 @@
                                     <label class="form-label">Instansi</label>
                                     <input type="text" name="instansi" class="form-control" value="{{ old('instansi', $editing?->instansi) }}" required>
                                 </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Tim</label>
+                                    <select name="tim" class="form-select" required>
+                                        <option value="">Pilih tim</option>
+                                        @php $timOptions = ['Tim A', 'Tim B', 'Tim C', 'Tim D']; @endphp
+                                        @foreach ($timOptions as $tim)
+                                            <option value="{{ $tim }}" @selected(old('tim', $editing?->tim) === $tim)>{{ $tim }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                             <div class="d-flex justify-content-end gap-2 mt-4">
                                 <button type="submit" class="btn btn-primary">
@@ -89,20 +99,22 @@
                             <table class="table table-striped table-hover mb-0 align-middle">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>Nama</th>
-                                        <th>Instansi</th>
-                                        <th class="text-center">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($items as $item)
-                                        <tr @if($editing && $editing->id === $item->id) class="table-warning" @endif>
-                                            <td>{{ $item->nama }}</td>
-                                            <td>{{ $item->instansi }}</td>
-                                            <td class="text-center">
-                                                <a href="{{ route('pewawancara.edit', $item) }}" class="text-primary me-2" title="Edit">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </a>
+                                <th>Nama</th>
+                                <th>Instansi</th>
+                                <th>Tim</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($items as $item)
+                                <tr @if($editing && $editing->id === $item->id) class="table-warning" @endif>
+                                    <td>{{ $item->nama }}</td>
+                                    <td>{{ $item->instansi }}</td>
+                                    <td>{{ $item->tim }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ route('pewawancara.edit', $item) }}" class="text-primary me-2" title="Edit">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
                                                 <form action="{{ route('pewawancara.destroy', $item) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')

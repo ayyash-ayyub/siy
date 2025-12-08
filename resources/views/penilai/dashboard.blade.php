@@ -42,13 +42,29 @@
                 <form action="#" method="POST" onsubmit="return false;">
                     <div class="row g-3">
                         <div class="col-md-6">
+                            <label class="form-label">Penilai (Pilih Tim)</label>
+                            <select id="penilai" class="form-select">
+                                <option value="">Pilih tim penilai</option>
+                                @foreach ($pewawancaraGroups as $tim => $members)
+                                    <option value="{{ $tim }}">
+                                        {{ $tim }}: {{ $members->pluck('nama')->implode(', ') }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Posisi Dilamar</label>
+                            <input id="mapel" type="text" class="form-control" placeholder="" readonly>
+                        </div>
+                        <div class="col-md-6">
                             <label class="form-label">Nama Guru</label>
                             <select id="namaGuru" class="form-select">
                                 <option value="">Pilih guru</option>
                                 @foreach ($guruList as $guru)
                                     <option value="{{ $guru->id }}"
                                         data-instansi="{{ $guru->instansi }}"
-                                        data-mapel="{{ $guru->mapel }}">
+                                        data-mapel="{{ $guru->mapel }}"
+                                        data-tim="{{ $guru->tim }}">
                                         {{ $guru->nama }}
                                     </option>
                                 @endforeach
@@ -57,19 +73,6 @@
                         <div class="col-md-6">
                             <label class="form-label">Instansi / Sekolah</label>
                             <input id="instansi" type="text" class="form-control" placeholder="" readonly>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Posisi Dilamar</label>
-                            <input id="mapel" type="text" class="form-control" placeholder="" readonly>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Penilai</label>
-                            <select id="penilai" class="form-select">
-                                <option value="">Pilih penilai</option>
-                                @foreach ($pewawancaraList as $p)
-                                    <option value="{{ $p->id }}">{{ $p->nama }}</option>
-                                @endforeach
-                            </select>
                         </div>
                     </div>
                 </form>
@@ -152,6 +155,14 @@
             const successModalEl = document.getElementById('successModal');
             const successModal = successModalEl ? new bootstrap.Modal(successModalEl) : null;
             const catatanInput = document.getElementById('catatanKhusus');
+            const guruOptions = Array.from(document.querySelectorAll('#namaGuru option'))
+                .map(opt => ({
+                    value: opt.value,
+                    text: opt.textContent,
+                    instansi: opt.dataset.instansi,
+                    mapel: opt.dataset.mapel,
+                    tim: opt.dataset.tim || '',
+                }));
 
             selectGuru?.addEventListener('change', (event) => {
                 const option = event.target.selectedOptions[0];
@@ -164,6 +175,39 @@
             btnMulai?.addEventListener('click', () => {
                 startCard.classList.add('d-none');
                 section.classList.remove('d-none');
+            });
+
+            const filterGuruByTim = (tim) => {
+                const guruSelect = document.getElementById('namaGuru');
+                const current = guruSelect.value;
+                guruSelect.innerHTML = '';
+                const placeholder = document.createElement('option');
+                placeholder.value = '';
+                placeholder.textContent = 'Pilih guru';
+                guruSelect.appendChild(placeholder);
+
+                guruOptions
+                    .filter(opt => !tim || opt.tim === tim)
+                    .forEach(opt => {
+                        const option = document.createElement('option');
+                        option.value = opt.value;
+                        option.textContent = opt.text;
+                        option.dataset.instansi = opt.instansi;
+                        option.dataset.mapel = opt.mapel;
+                        option.dataset.tim = opt.tim;
+                        guruSelect.appendChild(option);
+                    });
+
+                if (!tim && current) {
+                    guruSelect.value = current;
+                }
+
+                guruSelect.dispatchEvent(new Event('change'));
+            };
+
+            document.getElementById('penilai')?.addEventListener('change', (event) => {
+                const tim = event.target.value;
+                filterGuruByTim(tim);
             });
 
             const fillSummary = (kategoriA, kategoriB, kategoriC, kategoriD, total, namaGuru) => {
@@ -225,7 +269,7 @@
                 const namaGuru = selectGuru?.selectedOptions[0]?.textContent?.trim() || '-';
                 const namaGuruId = selectGuru?.value || '';
                 const penilaiSelect = document.getElementById('penilai');
-                const penilaiId = penilaiSelect?.value || null;
+                const penilaiTim = penilaiSelect?.value || null;
                 const penilaiNama = penilaiSelect?.selectedOptions[0]?.textContent?.trim() || null;
                 const catatan = catatanInput?.value || null;
 
@@ -243,7 +287,8 @@
                     namaGuruId,
                     instansi: instansiInput.value,
                     posisi: mapelInput.value,
-                    penilaiId,
+                    penilaiId: null,
+                    penilaiTim,
                     penilaiNama,
                     kategoriA,
                     kategoriB,
@@ -294,6 +339,14 @@
                     msg.style.display = 'block';
                     msg.classList.remove('text-danger');
                     msg.classList.add('text-success');
+                    // Remove saved guru from available options
+                    if (payload.namaGuruId) {
+                        const index = guruOptions.findIndex(o => o.value === payload.namaGuruId);
+                        if (index >= 0) {
+                            guruOptions.splice(index, 1);
+                        }
+                        filterGuruByTim(document.getElementById('penilai')?.value || '');
+                    }
                     if (successModal) {
                         successModal.show();
                     }
@@ -308,8 +361,8 @@
 
             btnHitung?.addEventListener('click', () => {
                 const result = computeAndShow(false);
-                if (!result.namaGuruId || !result.penilaiId) {
-                    alert('Pilih Nama Guru dan Penilai terlebih dahulu.');
+                if (!result.namaGuruId || !result.penilaiTim) {
+                    alert('Pilih Tim Penilai dan Nama Guru terlebih dahulu.');
                     return;
                 }
                 savePenilaian(result);

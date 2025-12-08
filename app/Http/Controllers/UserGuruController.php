@@ -92,6 +92,7 @@ class UserGuruController extends Controller
             'jenjang' => ['required', 'string', 'max:50'],
             'kabupaten' => ['required', 'string', 'max:255'],
             'provinsi' => ['required', 'string', 'max:255'],
+            'tim' => ['required', 'in:Tim A,Tim B,Tim C,Tim D'],
         ]);
     }
 }

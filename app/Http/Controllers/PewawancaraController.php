@@ -53,6 +53,7 @@ class PewawancaraController extends Controller
         return $request->validate([
             'nama' => ['required', 'string', 'max:255'],
             'instansi' => ['required', 'string', 'max:255'],
+            'tim' => ['required', 'in:Tim A,Tim B,Tim C,Tim D'],
         ]);
     }
 }

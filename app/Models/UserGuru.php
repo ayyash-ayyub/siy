@@ -21,5 +21,6 @@ class UserGuru extends Model
         'jenjang',
         'kabupaten',
         'provinsi',
+        'tim',
     ];
 }

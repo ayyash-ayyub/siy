@@ -45,6 +45,12 @@
         height: 100%;
         resize: vertical;
     }
+
+    /* Hide Catatan Bukti (STAR Method) column */
+    .instrumen-table th.catatan-col,
+    .instrumen-table td:last-child {
+        display: none;
+    }
 </style>
 
 @php

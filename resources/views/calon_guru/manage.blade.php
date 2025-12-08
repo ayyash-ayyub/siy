@@ -102,6 +102,16 @@
                                     <input type="text" name="instansi" class="form-control" value="{{ old('instansi', $editing?->instansi) }}" required>
                                 </div>
                                 <div class="col-md-6">
+                                    <label class="form-label">Tim</label>
+                                    <select name="tim" class="form-select" required>
+                                        <option value="">Pilih tim</option>
+                                        @php $timOptions = ['Tim A', 'Tim B', 'Tim C', 'Tim D']; @endphp
+                                        @foreach ($timOptions as $tim)
+                                            <option value="{{ $tim }}" @selected(old('tim', $editing?->tim) === $tim)>{{ $tim }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
                                     <label class="form-label">Jenjang</label>
                                     <select name="jenjang" class="form-select" required>
                                         <option value="">Pilih jenjang</option>
@@ -151,6 +161,7 @@
                                         <th>Jenjang</th>
                                         <th>Kabupaten</th>
                                         <th>Provinsi</th>
+                                        <th>Tim</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -162,14 +173,15 @@
                                             <td>{{ $item->mapel }}</td>
                                             <td>{{ $item->nip }}</td>
                                             <td>{{ $item->pangkat }}</td>
-                                            <td>{{ $item->instansi }}</td>
-                                            <td>{{ $item->jenjang }}</td>
-                                            <td>{{ $item->kabupaten }}</td>
-                                            <td>{{ $item->provinsi }}</td>
-                                            <td class="text-center">
-                                                <a href="{{ route('calon-guru.edit', $item) }}" class="text-primary me-2" title="Edit">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </a>
+                                        <td>{{ $item->instansi }}</td>
+                                        <td>{{ $item->jenjang }}</td>
+                                        <td>{{ $item->kabupaten }}</td>
+                                        <td>{{ $item->provinsi }}</td>
+                                        <td>{{ $item->tim }}</td>
+                                        <td class="text-center">
+                                            <a href="{{ route('calon-guru.edit', $item) }}" class="text-primary me-2" title="Edit">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
                                                 <form action="{{ route('calon-guru.destroy', $item) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')

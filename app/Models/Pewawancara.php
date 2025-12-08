@@ -14,5 +14,6 @@ class Pewawancara extends Model
     protected $fillable = [
         'nama',
         'instansi',
+        'tim',
     ];
 }

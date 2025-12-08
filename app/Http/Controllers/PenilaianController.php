@@ -49,6 +49,7 @@ class PenilaianController extends Controller
             'nilai_asesmen_dan_sosial' => $validated['nilai_asesmen_dan_sosial'],
             'total' => $validated['total'],
             'catatan_khusus' => $validated['catatan_khusus'] ?? null,
+            'statusnilai' => 1,
             'namapenilai1' => $penilaiNama,
             'namapenilai2' => $validated['penilai2'] ?? null,
             'namapenilai3' => $validated['penilai3'] ?? null,
@@ -103,6 +104,7 @@ class PenilaianController extends Controller
             'nilai_asesmen_dan_sosial',
             'total',
             'catatan_khusus',
+            'statusnilai',
             'namapenilai1',
             'namapenilai2',
             'namapenilai3',
@@ -133,6 +135,7 @@ class PenilaianController extends Controller
                     $row->nilai_asesmen_dan_sosial,
                     $row->total,
                     $row->catatan_khusus,
+                    $row->statusnilai,
                     $row->namapenilai1,
                     $row->namapenilai2,
                     $row->namapenilai3,
@@ -161,5 +164,19 @@ class PenilaianController extends Controller
         $hasilPenilaian->delete();
 
         return redirect()->route('hasil-penilaian.index')->with('status', 'Hasil penilaian dihapus.');
+    }
+
+    /**
+     * Reset statusnilai to 0 (admin).
+     */
+    public function resetStatus(HasilPenilaian $hasilPenilaian)
+    {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+
+        $hasilPenilaian->update(['statusnilai' => 0]);
+
+        return redirect()->route('hasil-penilaian.index')->with('status', 'Status penilaian direset ke 0.');
     }
 }

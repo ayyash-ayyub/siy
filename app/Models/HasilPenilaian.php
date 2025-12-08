@@ -21,6 +21,7 @@ class HasilPenilaian extends Model
         'nilai_asesmen_dan_sosial',
         'total',
         'catatan_khusus',
+        'statusnilai',
         'namapenilai1',
         'namapenilai2',
         'namapenilai3',

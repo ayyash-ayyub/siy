@@ -46,9 +46,19 @@ class AuthController extends Controller
         $user = auth()->user();
 
         if ($user->role === 'penilai') {
+            $evaluatedIds = \App\Models\HasilPenilaian::where('statusnilai', 1)->pluck('user_guru_id');
+            $guruList = UserGuru::whereNotIn('id', $evaluatedIds)->orderBy('nama')->get();
+            $timOrder = ['Tim A', 'Tim B', 'Tim C', 'Tim D'];
+            $pewawancaraGroups = Pewawancara::orderBy('nama')
+                ->get()
+                ->sortBy(function ($p) use ($timOrder) {
+                    return array_search($p->tim, $timOrder);
+                })
+                ->groupBy('tim');
+
             return view('penilai.dashboard', [
-                'guruList' => UserGuru::orderBy('nama')->get(),
-                'pewawancaraList' => Pewawancara::orderBy('nama')->get(),
+                'guruList' => $guruList,
+                'pewawancaraGroups' => $pewawancaraGroups,
             ]);
         }
 

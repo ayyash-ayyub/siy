@@ -33,4 +33,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/hasil-penilaian', [PenilaianController::class, 'index'])->name('hasil-penilaian.index');
     Route::delete('/hasil-penilaian/{hasilPenilaian}', [PenilaianController::class, 'destroy'])->name('hasil-penilaian.destroy');
     Route::get('/hasil-penilaian/export/csv', [PenilaianController::class, 'export'])->name('hasil-penilaian.export');
+    Route::post('/hasil-penilaian/{hasilPenilaian}/reset', [PenilaianController::class, 'resetStatus'])->name('hasil-penilaian.reset');
 });

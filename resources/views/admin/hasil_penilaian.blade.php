@@ -28,10 +28,13 @@
 
     <main class="container py-4">
         <div class="card shadow-sm">
-            <div class="card-header">
+            <div class="card-header d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-2">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Hasil Penilaian</h5>
                     <a href="{{ route('hasil-penilaian.export') }}" class="btn btn-outline-primary btn-sm">Download CSV</a>
+                </div>
+                <div class="w-100 w-md-50">
+                    <input id="searchGuru" type="text" class="form-control form-control-sm" placeholder="Cari Nama Guru">
                 </div>
             </div>
             <div class="card-body p-0">
@@ -48,10 +51,8 @@
                                 <th>Asesmen &amp; Sosial</th>
                                 <th>Total</th>
                                 <th>Catatan</th>
-                                <th>Penilai 1</th>
-                                <th>Penilai 2</th>
-                                <th>Penilai 3</th>
-                                <th>Penilai 4</th>
+                                <th>Tim Penilai</th>
+                                <th>Status</th>
                                 <th>Waktu</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
@@ -69,9 +70,7 @@
                                     <td class="fw-bold">{{ number_format($item->total, 2) }}</td>
                                     <td style="max-width:220px;">{{ $item->catatan_khusus ?? '-' }}</td>
                                     <td>{{ $item->namapenilai1 }}</td>
-                                    <td>{{ $item->namapenilai2 ?? '-' }}</td>
-                                    <td>{{ $item->namapenilai3 ?? '-' }}</td>
-                                    <td>{{ $item->namapenilai4 ?? '-' }}</td>
+                                    <td>{{ $item->statusnilai ? '1 (Sudah dinilai)' : '0 (Belum dinilai)' }}</td>
                                     <td>{{ $item->created_at->format('Y-m-d H:i') }}</td>
                                     <td class="text-center">
                                         <form action="{{ route('hasil-penilaian.destroy', $item) }}" method="POST" onsubmit="return confirmDelete(event)">
@@ -81,11 +80,17 @@
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
+                                        <form action="{{ route('hasil-penilaian.reset', $item) }}" method="POST" class="d-inline" onsubmit="return confirmReset(event)">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link text-warning p-0 m-0 align-baseline">
+                                                <i class="bi bi-arrow-counterclockwise"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="14" class="text-center text-muted py-4">Belum ada hasil penilaian.</td>
+                                    <td colspan="13" class="text-center text-muted py-4">Belum ada hasil penilaian.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -106,6 +111,28 @@
             }
             return true;
         }
+
+        function confirmReset(event) {
+            const input = confirm('Status nilai akan direset ke 0 dan guru harus dinilai kembali. Lanjutkan?');
+            if (!input) {
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const search = document.getElementById('searchGuru');
+            const rows = Array.from(document.querySelectorAll('table tbody tr'));
+
+            search?.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                rows.forEach(row => {
+                    const nama = row.querySelector('td')?.textContent.toLowerCase() || '';
+                    row.style.display = nama.includes(term) ? '' : 'none';
+                });
+            });
+        });
     </script>
 </body>
 </html>
