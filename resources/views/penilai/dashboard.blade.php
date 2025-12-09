@@ -359,6 +359,7 @@
                     msg.style.display = 'block';
                     msg.classList.remove('text-success');
                     msg.classList.add('text-danger');
+                    alert(error.message);
                 });
             };
 

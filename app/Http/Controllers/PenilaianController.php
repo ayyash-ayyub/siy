@@ -34,6 +34,12 @@ class PenilaianController extends Controller
             'penilai4' => ['nullable', 'string'],
         ]);
 
+        if (HasilPenilaian::where('user_guru_id', $validated['user_guru_id'])->exists()) {
+            return response()->json([
+                'message' => 'Data penilaian untuk guru ini sudah tersimpan sebelumnya.',
+            ], Response::HTTP_CONFLICT);
+        }
+
         $penilaiNama = null;
         if (!empty($validated['penilai_id'])) {
             $penilaiNama = Pewawancara::find($validated['penilai_id'])?->nama;
