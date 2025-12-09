@@ -11,7 +11,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #60a5fa, #3b82f6);">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ route('dashboard') }}">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height:32px;">
+                <img src="{{ asset('images/dasboard.png') }}" alt="Logo" style="height:32px; object-fit: contain;">
                 <span>Dashboard</span>
             </a>
             <div class="d-flex align-items-center gap-2">

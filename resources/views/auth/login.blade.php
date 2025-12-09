@@ -97,9 +97,9 @@
 <body>
     <main class="card" aria-label="Halaman login">
         <div class="text-center mb-3">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height:52px;">
+            <img src="{{ asset('images/logo-gtk.jpeg') }}" alt="Logo" style="height:52px; object-fit: contain;">
         </div>
-        <h1>GTK</h1>
+        <br>
         <p>Apps Wawancara Guru SILN (YANGON)</p>
 
         @if ($errors->any())

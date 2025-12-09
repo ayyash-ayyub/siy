@@ -93,14 +93,14 @@
 <body>
     <header>
         <div class="brand d-flex align-items-center gap-2">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height:32px;">
+            <img src="{{ asset('images/dasboard.png') }}" alt="Logo" style="height:32px; object-fit: contain;">
             <span>Dashboard</span>
         </div>
         <nav aria-label="Menu">
-            <a href="#">Form penilaian</a>
+
             <a href="{{ route('calon-guru.index') }}">Tambah data calon guru</a>
             <a href="{{ route('pewawancara.index') }}">Data Pewawancara</a>
-            <a href="{{ route('hasil-penilaian.index') }}">hasil_penilaian</a>
+            <a href="{{ route('hasil-penilaian.index') }}">Hasil Penilaian</a>
             <form class="logout" action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="logout-btn">Keluar</button>
