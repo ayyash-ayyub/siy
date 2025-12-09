@@ -275,6 +275,7 @@
 
                 fillSummary(kategoriA, kategoriB, kategoriC, kategoriD, total, namaGuru);
                 setRecommendation(avg);
+                const rekomendasi = document.querySelector('input[name="rekomendasi"]:checked')?.value || null;
 
                 if (showModal) {
                     const modalEl = document.getElementById('rekapModal');
@@ -296,6 +297,7 @@
                     kategoriD,
                     total,
                     catatan,
+                    rekomendasi,
                 };
             };
 
@@ -320,6 +322,7 @@
                         nilai_asesmen_dan_sosial: payload.kategoriD,
                         total: payload.total,
                         catatan_khusus: payload.catatan,
+                        rekomendasi: payload.rekomendasi,
                         penilai_id: payload.penilaiId,
                         penilai_nama: payload.penilaiNama,
                         penilai2: null,

@@ -53,6 +53,7 @@
                                 <th>Catatan</th>
                                 <th>Tim Penilai</th>
                                 <th>Status</th>
+                                <th>Rekomendasi</th>
                                 <th>Waktu</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
@@ -71,6 +72,7 @@
                                     <td style="max-width:220px;">{{ $item->catatan_khusus ?? '-' }}</td>
                                     <td>{{ $item->namapenilai1 }}</td>
                                     <td>{{ $item->statusnilai ? '1 (Sudah dinilai)' : '0 (Belum dinilai)' }}</td>
+                                    <td>{{ $item->rekomendasi ?? '-' }}</td>
                                     <td>{{ $item->created_at->format('Y-m-d H:i') }}</td>
                                     <td class="text-center">
                                         <form action="{{ route('hasil-penilaian.destroy', $item) }}" method="POST" onsubmit="return confirmDelete(event)">
@@ -90,7 +92,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="13" class="text-center text-muted py-4">Belum ada hasil penilaian.</td>
+                                    <td colspan="14" class="text-center text-muted py-4">Belum ada hasil penilaian.</td>
                                 </tr>
                             @endforelse
                         </tbody>

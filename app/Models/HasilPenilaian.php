@@ -22,6 +22,7 @@ class HasilPenilaian extends Model
         'total',
         'catatan_khusus',
         'statusnilai',
+        'rekomendasi',
         'namapenilai1',
         'namapenilai2',
         'namapenilai3',
