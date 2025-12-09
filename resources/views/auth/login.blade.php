@@ -6,8 +6,8 @@
     <title>Login</title>
     <style>
         :root {
-            --primary: #2b7a78;
-            --primary-dark: #205d5c;
+            --primary: #1e2be3;
+            --primary-dark: #0a5de4;
             --background: #f1f5f9;
             --card: #ffffff;
             --text: #0f172a;
@@ -79,7 +79,7 @@
             box-shadow: 0 12px 30px rgba(32, 93, 92, 0.25);
         }
         .error {
-            background: #fef2f2;
+            background: #f2f3fe;
             border: 1px solid #fecdd3;
             color: #b91c1c;
             padding: 10px 12px;
@@ -100,7 +100,7 @@
             <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height:52px;">
         </div>
         <h1>GTK</h1>
-        <p>WAWANCARA GURU SILN (YANGON)</p>
+        <p>Apps Wawancara Guru SILN (YANGON)</p>
 
         @if ($errors->any())
             <div class="error">
